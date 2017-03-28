@@ -3,16 +3,16 @@ function Wall() {
     this.show = function() {
         fill(214, 142, 255);
         noStroke();
-        rect(0, 0, 900, 10);
-        rect(0, 0, 10,900);
-        rect(0, 890, 900, 10);
-        rect(890, 0, 10, 900);
+        rect(0, 0, width, 10);
+        rect(0, 0, 10,height);
+        rect(0, height-10, width, 10);
+        rect(width-10, 0, 10, height);
     }
     this.hit = function(other) {
-        if (other.x >= 890) {
+        if (other.x >= width-10) {
             return true;
         }
-        if (other.y >= 890) {
+        if (other.y >= height-10) {
             return true;
         }
         if (other.y <= 10) {

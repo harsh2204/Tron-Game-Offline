@@ -7,36 +7,60 @@ var wall;
 var p1;
 var p2;
 var p3;
+var score;
+var invincible = true;
+var c;
+var alpha;
+var up;
+var pwups = [];
 function setup() {
-  createCanvas(900,900);
+  createCanvas(window.innerWidth-50,window.innerHeight-150);
   // frameRate(20);
+setInterval(function(){
+if(pwups.length<2){
+	pwups.push(new PowerUps);
+}
+},5000);
   t1 = new Tron();
   t2 = new Tron();
   t3 = new Tron();
+alpha = 0;
+	c = color(255,215,0);
 //  c1 =color (255,100,100);
-  c1 =color (255,255,153);
+  c1 =color (255,70,0);
   c2 =color (100,200,160);
-  c3 =color (0,0,200);
+  c3 =color (135,206,235);
   wall = new Wall();
 	p1 =0;
 	p2 =0;
 	p3 =0;
-
-  for(var i =0;i<30;i++){
+score = createP("Deaths- Red : "+String(p1)+" Green : "+String(p2)+" Blue : "+String(p3)+"FPS: "+frameRate());
+  for(var i =0;i<100;i++){
     blocks.push(new Block());
     }
+	setTimeout(function(){ invincible = false
+},3000);
 }
 function resetGame(){
+invincible = true;
 t1 = new Tron();
   t2 = new Tron();
   t3 = new Tron();
   blocks =[];
-  for(var i =0;i<30;i++){
+pwups=[];
+  for(var i =0;i<100;i++){
     blocks.push(new Block());
-    }
-  loop();
-console.log("Deaths- Red : "+p1+" Green : "+p2+" Blue : "+p3);
+   }  
+fill(0);
+setTimeout(function(){ invincible = false
+},3000);
+updateScore();
+loop();
 
+}
+function updateScore(){
+score.remove();
+score = createP("Deaths- Red : "+String(p1)+" Green : "+String(p2)+" Blue : "+String(p3)+"FPS: "+frameRate());
 }
 function mousePressed(){
   // t1.total++;
@@ -50,6 +74,10 @@ function draw() {
     t2.total++;
 t3.total++;
   }
+	
+//textSize(32);
+ //textAlign(CENTER, BASELINE);
+//text(s , 920, 920);
 
   // console.log(t1.xspeed);
   // console.log(t1.acc);
@@ -62,8 +90,9 @@ t3.total++;
   t2.show(c2);
 t3.update();
   t3.show(c3);
-
-  if(t1.hits(t2)){
+	
+if(!invincible){  
+if(t1.hits(t2)){
     t1.colorize(100);
 	p1++;
     noLoop();
@@ -99,8 +128,8 @@ if(t2.hits(t3)){
 p2++;
     console.log("Game Over! T1 Wins!");
   }
-  for(var i =0; i<blocks.length;i++){
-    blocks[i].show();
+for(var i =0; i<blocks.length;i++){
+    //blocks[i].show();
     if(blocks[i].hits(t1)){
       t1.colorize(100);
 p1++;
@@ -120,6 +149,56 @@ p3++;
      noLoop();
     }
   }
+}else{
+ if(alpha>=255){
+    up=false
+  }else if(alpha<=0){
+    up=true;
+  }
+  if(up){
+    alpha+=10; 
+  }else{
+    alpha-=10;
+  }
+	c = color(255,215,0,alpha);
+	fill(c);
+	rect(0,0,width,height);
+}
+  for(var i =0; i<blocks.length;i++){
+    blocks[i].show();
+}
+
+for(var i = pwups.length-1;i>=0;i--){
+	pwups[i].show();
+	if(pwups[i].hits(t1)){
+if(pwups[i].type ==1){
+	t1.boost();
+}
+if(pwups[i].type ==2){
+	p1-=1;
+	updateScore();
+}
+}	if(pwups[i].hits(t2)){
+	if(pwups[i].type ==1){
+	t2.boost();
+}
+if(pwups[i].type ==2){
+	p2 -= 1;
+	updateScore();
+}
+}		if(pwups[i].hits(t3)){
+	if(pwups[i].type ==1){
+	t3.boost();
+}
+if(pwups[i].type ==2){
+	p3 -= 1;
+	updateScore();
+}
+}
+if(pwups[i].hits(t1)||pwups[i].hits(t3)||pwups[i].hits(t2)){
+	pwups.splice(i,1);
+}		
+}
   if(wall.hit(t1)){
     t1.colorize(100);
     console.log("P1 Hit! GG");
@@ -143,9 +222,9 @@ p2++;
 }
 function keyReleased(){
   if(keyCode == 32){
-    t1.normalize();
+    //t1.normalize();
   }else if(keyCode == 69){
-	t2.normalize();
+	//t2.normalize();
 }
 }
 function keyPressed(){
@@ -158,9 +237,9 @@ function keyPressed(){
     t1.dir(1,0);
   }else if(keyCode == LEFT_ARROW){
     t1.dir(-1,0);
-  }else if(keyCode == 32){
+  }else if(keyCode == 16){
     console.log("BOOST!");
-    t1.boost();
+    //t1.boost();
   }
   if(keyCode == 87){
     t2.dir(0,-1);
@@ -172,7 +251,7 @@ function keyPressed(){
     t2.dir(-1,0);
   }else if(keyCode == 69){
     console.log("BOOST!");
-    t2.boost();
+    //t2.boost();
   }
 if(keyCode == 104){
     t3.dir(0,-1);
@@ -184,7 +263,7 @@ if(keyCode == 104){
     t3.dir(-1,0);
   }else if(keyCode == 107){
     console.log("BOOST!");
-    t3.boost();
+    //t3.boost();
   }
 if(keyCode == 13){
 resetGame();

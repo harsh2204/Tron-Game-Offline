@@ -1,6 +1,6 @@
 function Tron() {
-    this.x = random(100, 500);
-    this.y = random(100, 500);
+    this.x = random(100, width-100);
+    this.y = random(100, height-100);
     this.scl = 5;
     this.xspeed = 0;
     this.yspeed = 0;
@@ -84,9 +84,10 @@ ellipse(this.x + (this.scl / 2), this.y + (this.scl / 2), this.scl*5, this.scl*5
 }
     }
     this.dir = function(x, y) {
-        this.xspeed = x;
-        this.yspeed = y;
-    }
+		this.xspeed = x;
+this.yspeed = y;	  
+
+}
     this.hits = function(other) {
         for (i = 0; i < other.tail.length; i++) {
             var d = dist(this.x, this.y, other.tail[i].x, other.tail[i].y);

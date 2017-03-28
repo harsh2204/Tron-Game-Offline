@@ -1,6 +1,6 @@
 function Block() {
-    this.x = random(20, 880);
-    this.y = random(20, 880);
+    this.x = random(20, width-20);
+    this.y = random(20, height-20);
     this.size = 5;
 
 
